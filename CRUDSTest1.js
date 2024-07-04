@@ -7,7 +7,8 @@ let total = document.getElementById('total');
 let count = document.getElementById('count');
 let category = document.getElementById('category');
 let createButton = document.getElementById('create');
-
+let buttonMood = 'create';
+let tempIndex;
 
 // Get Total Price
 function getTotalPrice() {
@@ -44,15 +45,22 @@ createButton.onclick = function () {
         count: count.value,
         category: category.value,
     }
-    if (newProduct.count > 0) {
-        for (let i = 0; i < newProduct.count; i++) {
-            productsData.push(newProduct);
+    if (buttonMood === 'create') {
+        if (newProduct.count > 0) {
+            for (let i = 0; i < newProduct.count; i++) {
+                productsData.push(newProduct);
+            }
+        }
+        else {
+            alert("Count must be more than 0");
         }
     }
     else {
-        alert("Count must be more than 0");
+        productsData[tempIndex] = newProduct;
+        buttonMood = 'create';
+        createButton.innerHTML = 'Create';
+        count.style.display = 'block';
     }
-
     localStorage.setItem('productData', JSON.stringify(productsData));
 
     clearInputData();
@@ -88,7 +96,7 @@ function showData() {
                         <td>${productsData[i].discount}</td>
                         <td>${productsData[i].total}</td>
                         <td>${productsData[i].category}</td>
-                        <td><button id="update">Update</button></td>
+                        <td><button onclick="updateData(${i})" id="update">Update</button></td>
                         <td><button onclick="deleteData(${i})" id="delete">Delete</button></td>
                     </tr>
                 `;
@@ -117,4 +125,20 @@ function deleteAllData() {
     productsData.splice(0);
     localStorage.clear();
     showData();
+}
+
+
+// Update Data
+function updateData(i) {
+    title.value = productsData[i].title;
+    price.value = productsData[i].price;
+    taxes.value = productsData[i].taxes;
+    ads.value = productsData[i].ads;
+    discount.value = productsData[i].discount;
+    category.value = productsData[i].category;
+    getTotalPrice();
+    count.style.display = 'none';
+    createButton.innerHTML = 'Update';
+    buttonMood = 'update';
+    tempIndex = i;
 }
