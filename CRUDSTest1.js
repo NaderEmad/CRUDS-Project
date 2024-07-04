@@ -46,25 +46,31 @@ createButton.onclick = function () {
         count: count.value,
         category: category.value,
     }
-    if (buttonMood === 'create') {
-        if (newProduct.count > 0) {
-            for (let i = 0; i < newProduct.count; i++) {
-                productsData.push(newProduct);
+    if (title.value != '' &&
+        price.value != '' &&
+        category.value != '' &&
+        newProduct.count <= 100) {
+        if (buttonMood === 'create') {
+            if (newProduct.count > 0) {
+                for (let i = 0; i < newProduct.count; i++) {
+                    productsData.push(newProduct);
+                }
+            }
+            else {
+                alert("Count must be more than 0");
             }
         }
         else {
-            alert("Count must be more than 0");
+            productsData[tempIndex] = newProduct;
+            buttonMood = 'create';
+            createButton.innerHTML = 'Create';
+            count.style.display = 'block';
         }
+        clearInputData();
     }
-    else {
-        productsData[tempIndex] = newProduct;
-        buttonMood = 'create';
-        createButton.innerHTML = 'Create';
-        count.style.display = 'block';
-    }
+
     localStorage.setItem('productData', JSON.stringify(productsData));
 
-    clearInputData();
     showData();
 }
 
