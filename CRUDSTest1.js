@@ -8,6 +8,7 @@ let count = document.getElementById('count');
 let category = document.getElementById('category');
 let createButton = document.getElementById('create');
 let buttonMood = 'create';
+let searchMood = 'searchByTitle';
 let tempIndex;
 
 // Get Total Price
@@ -141,4 +142,69 @@ function updateData(i) {
     createButton.innerHTML = 'Update';
     buttonMood = 'update';
     tempIndex = i;
+    scroll({
+        top: 0,
+        behavior: "smooth",
+    })
+}
+
+
+// Searching
+function changeSearchMood(id) {
+    let search = document.getElementById('search');
+    if (id === 'searchByTitle') {
+        searchMood = 'searchByTitle';
+        search.placeholder = "Search By Title";
+    }
+    else {
+        searchMood = 'searchByCategory';
+        search.placeholder = "Search By Category";
+    }
+    search.focus();
+    search.value = '';
+    showData();
+}
+
+function searchData(value) {
+    let table = '';
+    for (let i = 0; i < productsData.length; i++) {
+        if (searchMood === 'searchByTitle' &&
+            productsData[i].title.toLowerCase().includes(value.toLowerCase())
+        ) {
+            table += `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td>${productsData[i].title}</td>
+                        <td>${productsData[i].price}</td>
+                        <td>${productsData[i].taxes}</td>
+                        <td>${productsData[i].ads}</td>
+                        <td>${productsData[i].discount}</td>
+                        <td>${productsData[i].total}</td>
+                        <td>${productsData[i].category}</td>
+                        <td><button onclick="updateData(${i})" id="update">Update</button></td>
+                        <td><button onclick="deleteData(${i})" id="delete">Delete</button></td>
+                    </tr>
+                `;
+        }
+        else if (searchMood === 'searchByCategory' &&
+            productsData[i].category.toLowerCase().includes(value.toLowerCase())
+        ) {
+            table += `
+                    <tr>
+                        <td>${i + 1}</td>
+                        <td>${productsData[i].title}</td>
+                        <td>${productsData[i].price}</td>
+                        <td>${productsData[i].taxes}</td>
+                        <td>${productsData[i].ads}</td>
+                        <td>${productsData[i].discount}</td>
+                        <td>${productsData[i].total}</td>
+                        <td>${productsData[i].category}</td>
+                        <td><button onclick="updateData(${i})" id="update">Update</button></td>
+                        <td><button onclick="deleteData(${i})" id="delete">Delete</button></td>
+                    </tr>
+                `;
+        }
+
+    }
+    document.getElementById('tableBody').innerHTML = table;
 }
